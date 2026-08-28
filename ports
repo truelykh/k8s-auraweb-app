@@ -1,0 +1,40 @@
+| Traffic                    | Protocol |                Port | Purpose           |
+| -------------------------- | -------: | ------------------: | ----------------- |
+| Browser → Gateway          |     HTTP |              **80** | HTTP web traffic  |
+| Browser → Gateway          |    HTTPS |             **443** | HTTPS web traffic |
+| Gateway → Frontend         |     HTTP |   **80** / app port | Frontend          |
+| Gateway → Admin            |     HTTP |   **80** / app port | Admin UI          |
+| Gateway → User-Auth        |     HTTP | **8080** / app port | Auth API          |
+| Gateway → Catalog          |     HTTP | **8080** / app port | Product API       |
+| Gateway → Shopping         |     HTTP | **8080** / app port | Cart API          |
+| Gateway → Order-Payment    |     HTTP | **8080** / app port | Order API         |
+| Gateway → Inventory        |     HTTP | **8080** / app port | Inventory API     |
+
+
+| User-Auth → PostgreSQL     |      TCP |            **5432** | PostgreSQL        |
+| User-Auth → Redis          |      TCP |            **6379** | Redis             |
+| Catalog → PostgreSQL       |      TCP |            **5432** | PostgreSQL        |
+| Catalog → Redis            |      TCP |            **6379** | Redis             |
+| Shopping → Redis           |      TCP |            **6379** | Redis             |
+| Shopping → PostgreSQL      |      TCP |            **5432** | PostgreSQL        |
+| Order-Payment → PostgreSQL |      TCP |            **5432** | PostgreSQL        |
+| Order-Payment → RabbitMQ   |      TCP |            **5672** | AMQP              |
+| Fulfillment → PostgreSQL   |      TCP |            **5432** | PostgreSQL        |
+| Fulfillment → RabbitMQ     |      TCP |            **5672** | AMQP              |
+| Inventory → PostgreSQL     |      TCP |            **5432** | PostgreSQL        |
+| Inventory → RabbitMQ       |      TCP |            **5672** | AMQP              |
+
+User-Auth ─────────────── TCP 5432 ───────► PostgreSQL
+Catalog ───────────────── TCP 5432 ───────► PostgreSQL
+Shopping ──────────────── TCP 5432 ───────► PostgreSQL
+Order-Payment ─────────── TCP 5432 ───────► PostgreSQL
+Fulfillment ───────────── TCP 5432 ───────► PostgreSQL
+Inventory ─────────────── TCP 5432 ───────► PostgreSQL
+
+User-Auth ─────────────── TCP 6379 ───────► Redis
+Catalog ───────────────── TCP 6379 ───────► Redis
+Shopping ──────────────── TCP 6379 ───────► Redis
+
+Order-Payment ─────────── TCP 5672 ───────► RabbitMQ
+Fulfillment ───────────── TCP 5672 ───────► RabbitMQ
+Inventory ─────────────── TCP 5672 ───────► RabbitMQ

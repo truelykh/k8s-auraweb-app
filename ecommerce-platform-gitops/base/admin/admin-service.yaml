@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: auraweb
+  name: admin-service
+  labels:
+    app: admin-service
+spec:
+  selector:
+    app: admin-pod-deploy
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 80

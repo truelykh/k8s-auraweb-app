@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: auraweb
+  name: order-payment-service
+  labels:
+    app: order-payment-service
+spec:
+  selector:
+    app: order-payment-pod-deploy
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: 8080

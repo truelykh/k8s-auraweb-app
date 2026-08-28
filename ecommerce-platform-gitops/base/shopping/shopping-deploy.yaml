@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: auraweb
+  name: shopping-deploy
+  labels:
+    app: shopping-deploy
+spec:
+  selector:
+    matchLabels:
+      app: shopping-pod-deploy
+  template:
+    metadata:
+      labels:
+        app: shopping-pod-deploy
+    spec:
+      serviceAccountName: shoppingservice
+      securityContext:
+        fsGroup: 1000
+        runAsGroup: 1000
+        runAsUser: 1000
+        runAsNonRoot: true
+      containers:
+        - name: shopping
+          image: kubeprojects/shopping:1.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              cpu: "64Mi"
+              memory: "50m"
+            limits:
+              cpu: "128Mi"
+              memory: "200m"
+          securityContext:
+            allowPrivilegeEscalation: false
+            privileged: false
+            capabilities:
+              drop:
+                - ALL
+          readinessProbe:
+            initialDelaySeconds: 20
+            periodSeconds: 15
+            httpGet:
+              path: /
+              port: 8080
+          livenessProbe:
+            initialDelaySeconds: 20
+            periodSeconds: 15
+            httpGet:
+              path: /
+              port: 8080

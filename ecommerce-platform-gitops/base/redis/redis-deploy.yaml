@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: auraweb
+  name: redis-deploy
+  labels:
+    app: redis-deploy
+spec:
+  selector:
+    matchLabels:
+      app: redis-pod-deploy
+  template:
+    metadata:
+      labels:
+        app: redis-pod-deploy
+    spec:
+      serviceAccountName: redisservice
+      securityContext:
+        fsGroup: 1000
+        runAsGroup: 1000
+        runAsUser: 1000
+        runAsNonRoot: true
+      containers:
+        - name: redis
+          image: redis:7-alpine
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 6379
+          resources:
+            requests:
+              cpu: "64Mi"
+              memory: "50m"
+            limits:
+              cpu: "128Mi"
+              memory: "200m"
+          securityContext:
+            allowPrivilegeEscalation: false
+            privileged: false
+            capabilities:
+              drop:
+                - ALL
+          readinessProbe:
+            initialDelaySeconds: 20
+            periodSeconds: 15
+            tcpSocket:
+              port: 6379
+          livenessProbe:
+            initialDelaySeconds: 20
+            periodSeconds: 15
+            tcpSocket:
+              port: 6379
