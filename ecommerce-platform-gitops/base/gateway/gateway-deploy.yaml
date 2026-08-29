@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: auraweb
+  name: gateway-deploy
+  labels:
+    app: gateway-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gateway-pod-deploy
+  template:
+    metadata:
+      labels:
+        app: gateway-pod-deploy
+    spec:
+      containers:
+        - name: gateway
+          image: nginx:stable-alpine
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: "64m"
+              memory: "64Mi"
+            limits:
+              cpu: "256m"
+              memory: "256Mi"
+          volumeMounts:
+            - name: nginx-config
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+              readOnly: true
+            - name: nginx-proxy-params
+              mountPath: /etc/nginx/proxy_params
+              subPath: proxy_params
+              readOnly: true
+      volumes:
+        - name: nginx-config
+          configMap:
+            name: gateway-config
+            items:
+              - key: nginx.conf
+                path: nginx.conf
+        - name: nginx-proxy-params
+          configMap:
+            name: gateway-config
+            items:
+              - key: proxy_params
+                path: proxy_params

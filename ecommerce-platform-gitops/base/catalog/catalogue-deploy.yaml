@@ -22,7 +22,7 @@ spec:
         runAsNonRoot: true
       containers:
         - name: catalogue
-          image: kubeprojects/catalog:1.0
+          image: kubeprojects/catalog:2.0
           imagePullPolicy: IfNotPresent
           env:
             - name: NODE_ENV

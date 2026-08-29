@@ -22,7 +22,7 @@ spec:
         runAsNonRoot: true
       containers:
         - name: platform
-          image: kubeprojects/platform:1.0
+          image: kubeprojects/platform:2.0
           imagePullPolicy: IfNotPresent
           env:
             - name: PORT

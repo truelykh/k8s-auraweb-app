@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         APP_NAME = 'order-payment'
-        DOCKER_IMAGE = 'kubeprojects/orderpayments'
+        DOCKER_IMAGE = 'kubeprojects/orderpayment'
         DOCKER_HUB_CRED_ID = 'dockerhub-credentials'
         GITOPS_CRED_ID = 'git-credentials'
         TARGET_ENV = 'dev' // Set to 'dev' or 'prod'

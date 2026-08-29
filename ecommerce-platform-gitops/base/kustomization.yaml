@@ -43,3 +43,11 @@ resources:
   - user-auth/user-auth-service.yaml
   - infra/storageclass.yaml
   - infra/namespace.yaml
+  - gateway/gateway-deploy.yaml
+  - gateway/gateway-service.yaml
+
+configMapGenerator:
+  - name: gateway-config
+    files:
+      - gateway/nginx.conf
+      - gateway/proxy_params

@@ -22,7 +22,7 @@ spec:
         runAsNonRoot: true
       containers:
         - name: ful
-          image: kubeprojects/fulfilment:1.0
+          image: kubeprojects/fulfilment:2.0
           imagePullPolicy: IfNotPresent
           env:
             - name: PORT

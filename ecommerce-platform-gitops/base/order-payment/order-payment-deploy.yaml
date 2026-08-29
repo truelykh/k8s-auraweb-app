@@ -22,7 +22,7 @@ spec:
         runAsNonRoot: true
       containers:
         - name: order-payment
-          image: kubeprojects/orderpayments:1.0
+          image: kubeprojects/orderpayment:2.0
           imagePullPolicy: IfNotPresent
           env:
             - name: PORT

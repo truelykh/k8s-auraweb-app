@@ -22,7 +22,7 @@ spec:
         runAsNonRoot: true
       containers:
         - name: user-auth
-          image: kubeprojects/userauth:1.0
+          image: kubeprojects/userauth:2.0
           imagePullPolicy: IfNotPresent
           env:
             - name: PORT
