@@ -41,8 +41,10 @@ resources:
   - user-auth/user-auth-deploy.yaml
   - user-auth/user-auth-sa.yaml
   - user-auth/user-auth-service.yaml
-  - infra/storageclass.yaml
-  - infra/namespace.yaml
+  - infra/storage/storageclass.yaml
+  - infra/cluster/namespace.yaml
+  - infra/minio/minio-deploy.yaml
+  - infra/minio/minio-service.yaml
   - gateway/gateway-deploy.yaml
   - gateway/gateway-service.yaml
 
