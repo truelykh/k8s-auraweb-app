@@ -1,0 +1,52 @@
+pipeline {
+    agent any
+
+    environment {
+        APP_NAME = 'frontend'
+        DOCKER_IMAGE = 'kubeprojects/frontend'
+        DOCKER_HUB_CRED_ID = 'dockerhub-credentials'
+        GITOPS_CRED_ID = 'git-credentials'
+        TARGET_ENV = 'dev' // Set to 'dev' or 'prod'
+        IMAGE_TAG = "1.0.${BUILD_NUMBER}"
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Build & Push Image') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: "${DOCKER_HUB_CRED_ID}", usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    sh '''
+                        docker build -t ${DOCKER_IMAGE}:${IMAGE_TAG} .
+                        echo "${DOCKER_PASS}" | docker login -u "${DOCKER_USER}" --password-stdin
+                        docker push ${DOCKER_IMAGE}:${IMAGE_TAG}
+                    '''
+                }
+            }
+        }
+
+        stage('Update GitOps Repository') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: "${GITOPS_CRED_ID}", usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
+                    sh '''
+                        git config --global user.email "jenkins@your-org.com"
+                        git config --global user.name "Jenkins CI"
+                        git clone https://${GIT_USER}:${GIT_PASS}@github.com/your-org/ecommerce-platform-gitops.git
+                        
+                        cd ecommerce-platform-gitops/overlays/${TARGET_ENV}
+                        kustomize edit set image ${DOCKER_IMAGE}=${DOCKER_IMAGE}:${IMAGE_TAG}
+                        
+                        cd ../..
+                        git add overlays/${TARGET_ENV}/kustomization.yaml
+                        git commit -m "Deploy ${APP_NAME} ${IMAGE_TAG} to ${TARGET_ENV}"
+                        git push origin main
+                    '''
+                }
+            }
+        }
+    }
+}

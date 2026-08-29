@@ -1,0 +1,86 @@
+// Example Jenkinsfile for your Microservice Repositories (CI Pipeline)
+// This builds the image and updates the GitOps repository
+
+pipeline {
+    agent any
+
+    environment {
+        // App specific variables - Update these per microservice
+        APP_NAME = 'frontend' // e.g., 'frontend', 'catalog'
+        DOCKER_HUB_CRED_ID = 'dockerhub-credentials'
+        DOCKER_IMAGE = "kubeprojects/${APP_NAME}"
+        
+        // GitOps Repo variables
+        GITOPS_REPO = 'https://github.com/your-org/ecommerce-platform-gitops.git'
+        GITOPS_CRED_ID = 'git-credentials'
+        
+        // Generate a unique tag based on the Jenkins build number
+        IMAGE_TAG = "1.0.${BUILD_NUMBER}"
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Build & Test') {
+            steps {
+                // Example for Node.js
+                // sh 'npm install'
+                // sh 'npm test'
+                echo "Running unit tests for ${APP_NAME}..."
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh "docker build -t ${DOCKER_IMAGE}:${IMAGE_TAG} ."
+            }
+        }
+
+        stage('Push Docker Image') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: "${DOCKER_HUB_CRED_ID}", usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    sh '''
+                        echo "${DOCKER_PASS}" | docker login -u "${DOCKER_USER}" --password-stdin
+                        docker push ${DOCKER_IMAGE}:${IMAGE_TAG}
+                    '''
+                }
+            }
+        }
+
+        stage('Update GitOps Repository') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: "${GITOPS_CRED_ID}", usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
+                    sh '''
+                        # Configure Git
+                        git config --global user.email "jenkins@your-org.com"
+                        git config --global user.name "Jenkins CI"
+
+                        # Clone the GitOps repository
+                        git clone https://${GIT_USER}:${GIT_PASS}@github.com/your-org/ecommerce-platform-gitops.git
+                        cd ecommerce-platform-gitops
+
+                        # Update the image tag in the deployment file
+                        # We use sed to replace the existing image tag with the new one
+                        DEPLOY_FILE="base/${APP_NAME}/${APP_NAME}-deploy.yaml"
+                        
+                        if [ -f "$DEPLOY_FILE" ]; then
+                            sed -i "s|image: ${DOCKER_IMAGE}:.*|image: ${DOCKER_IMAGE}:${IMAGE_TAG}|g" $DEPLOY_FILE
+                            
+                            # Commit and push changes
+                            git add $DEPLOY_FILE
+                            git commit -m "Update ${APP_NAME} image to tag ${IMAGE_TAG} (Build: ${BUILD_NUMBER})"
+                            git push origin main
+                        else
+                            echo "Deployment file $DEPLOY_FILE not found!"
+                            exit 1
+                        fi
+                    '''
+                }
+            }
+        }
+    }
+}

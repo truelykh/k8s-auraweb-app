@@ -6,6 +6,7 @@ metadata:
   labels:
     app: redis-pvc
 spec:
+  storageClassName: gp3
   accessModes:
     - ReadWriteOnce
   resources:

@@ -1,0 +1,44 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - admin/admin-deploy.yaml
+  - admin/admin-sa.yaml
+  - admin/admin-service.yaml
+  - catalog/catalogue-deploy.yaml
+  - catalog/catalogue-sa.yaml
+  - catalog/catalogue-service.yaml
+  - frontend/frontend-deploy.yaml
+  - frontend/frontend-sa.yaml
+  - frontend/frontend-service.yaml
+  - fulfillment/ful-deploy.yaml
+  - fulfillment/ful-sa.yaml
+  - fulfillment/ful-service.yaml
+  - inventory/inventory-deploy.yaml
+  - inventory/inventory-sa.yaml
+  - inventory/inventory-service.yaml
+  - order-payment/order-payment-deploy.yaml
+  - order-payment/order-payment-sa.yaml
+  - order-payment/order-payment-service.yaml
+  - platform/platform-deploy.yaml
+  - platform/platform-sa.yaml
+  - platform/platform-service.yaml
+  - postgres/postgres-deploy.yaml
+  - postgres/postgres-sa.yaml
+  - postgres/postgres-service.yaml
+  - postgres/postgres-pvc.yaml
+  - rabbitmq/rabbitmq-deploy.yaml
+  - rabbitmq/rabbitmq-sa.yaml
+  - rabbitmq/rabbitmq-service.yaml
+  - rabbitmq/rabbitmq-pvc.yaml
+  - redis/redis-deploy.yaml
+  - redis/redis-sa.yaml
+  - redis/redis-service.yaml
+  - redis/redis-pvc.yaml
+  - shopping/shopping-deploy.yaml
+  - shopping/shopping-sa.yaml
+  - shopping/shopping-service.yaml
+  - user-auth/user-auth-deploy.yaml
+  - user-auth/user-auth-sa.yaml
+  - user-auth/user-auth-service.yaml
+  - iinfra/storageclass/storageclass.yaml
