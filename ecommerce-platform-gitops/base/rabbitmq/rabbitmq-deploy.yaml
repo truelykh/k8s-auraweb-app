@@ -15,15 +15,15 @@ spec:
         app: rabbitmq-pod-deploy
     spec:
       serviceAccountName: rabbitmqservice
-      securityContext:
-        fsGroup: 1000
-        runAsGroup: 1000
-        runAsUser: 1000
-        runAsNonRoot: true
       containers:
         - name: rabbitmq
           image: rabbitmq:3-management-alpine
           imagePullPolicy: IfNotPresent
+          env:
+            - name: RABBITMQ_DEFAULT_USER
+              value: guest
+            - name: RABBITMQ_DEFAULT_PASS
+              value: guest
           ports:
             - containerPort: 5672
           resources:
@@ -31,14 +31,11 @@ spec:
               cpu: "64Mi"
               memory: "50m"
             limits:
-              cpu: "128Mi"
-              memory: "200m"
-          securityContext:
-            allowPrivilegeEscalation: false
-            privileged: false
-            capabilities:
-              drop:
-                - ALL
+              cpu: "256Mi"
+              memory: "512Mi"
+          volumeMounts:
+            - name: rabbitmq-data
+              mountPath: /var/lib/rabbitmq
           readinessProbe:
             initialDelaySeconds: 20
             periodSeconds: 15
@@ -49,3 +46,7 @@ spec:
             periodSeconds: 15
             tcpSocket:
               port: 5672
+      volumes:
+        - name: rabbitmq-data
+          persistentVolumeClaim:
+            claimName: rabbitmq-pvc

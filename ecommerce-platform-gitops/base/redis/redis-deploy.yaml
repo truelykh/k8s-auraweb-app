@@ -15,11 +15,6 @@ spec:
         app: redis-pod-deploy
     spec:
       serviceAccountName: redisservice
-      securityContext:
-        fsGroup: 1000
-        runAsGroup: 1000
-        runAsUser: 1000
-        runAsNonRoot: true
       containers:
         - name: redis
           image: redis:7-alpine
@@ -31,14 +26,11 @@ spec:
               cpu: "64Mi"
               memory: "50m"
             limits:
-              cpu: "128Mi"
-              memory: "200m"
-          securityContext:
-            allowPrivilegeEscalation: false
-            privileged: false
-            capabilities:
-              drop:
-                - ALL
+              cpu: "256Mi"
+              memory: "512Mi"
+          volumeMounts:
+            - name: redis-data
+              mountPath: /data
           readinessProbe:
             initialDelaySeconds: 20
             periodSeconds: 15
@@ -49,3 +41,7 @@ spec:
             periodSeconds: 15
             tcpSocket:
               port: 6379
+      volumes:
+        - name: redis-data
+          persistentVolumeClaim:
+            claimName: redis-pvc

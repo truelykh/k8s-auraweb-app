@@ -15,15 +15,17 @@ spec:
         app: postgres-pod-deploy
     spec:
       serviceAccountName: postgresservice
-      securityContext:
-        fsGroup: 1000
-        runAsGroup: 1000
-        runAsUser: 1000
-        runAsNonRoot: true
       containers:
         - name: postgres
           image: postgres:15-alpine
           imagePullPolicy: IfNotPresent
+          env:
+            - name: POSTGRES_USER
+              value: auraweb_user
+            - name: POSTGRES_PASSWORD
+              value: password
+            - name: POSTGRES_DB
+              value: auraweb_db
           ports:
             - containerPort: 5432
           resources:
@@ -31,14 +33,11 @@ spec:
               cpu: "64Mi"
               memory: "50m"
             limits:
-              cpu: "128Mi"
-              memory: "200m"
-          securityContext:
-            allowPrivilegeEscalation: false
-            privileged: false
-            capabilities:
-              drop:
-                - ALL
+              cpu: "256Mi"
+              memory: "512Mi"
+          volumeMounts:
+            - name: postgres-data
+              mountPath: /var/lib/postgresql/data
           readinessProbe:
             initialDelaySeconds: 20
             periodSeconds: 15
@@ -49,3 +48,7 @@ spec:
             periodSeconds: 15
             tcpSocket:
               port: 5432
+      volumes:
+        - name: postgres-data
+          persistentVolumeClaim:
+            claimName: postgres-pvc

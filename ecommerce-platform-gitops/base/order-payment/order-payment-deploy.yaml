@@ -24,15 +24,32 @@ spec:
         - name: order-payment
           image: kubeprojects/orderpayments:1.0
           imagePullPolicy: IfNotPresent
+          env:
+            - name: PORT
+              value: "3002"
+            - name: DB_HOST
+              value: postgres-service
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_NAME
+              value: auraweb_db
+            - name: DB_USER
+              value: auraweb_user
+            - name: DB_PASSWORD
+              value: password
+            - name: RABBITMQ_URL
+              value: amqp://rabbitmq-service:5672
+            - name: STRIPE_SECRET_KEY
+              value: default_stripe_key
           ports:
-            - containerPort: 8080
+            - containerPort: 3002
           resources:
             requests:
               cpu: "64Mi"
-              memory: "50m"
+              memory: "256Mi"
             limits:
-              cpu: "128Mi"
-              memory: "200m"
+              cpu: "256Mi"
+              memory: "512Mi"
           securityContext:
             allowPrivilegeEscalation: false
             privileged: false
@@ -43,11 +60,11 @@ spec:
             initialDelaySeconds: 20
             periodSeconds: 15
             httpGet:
-              path: /
-              port: 8080
+              path: /health
+              port: 3002
           livenessProbe:
             initialDelaySeconds: 20
             periodSeconds: 15
             httpGet:
-              path: /
-              port: 8080
+              path: /health
+              port: 3002
