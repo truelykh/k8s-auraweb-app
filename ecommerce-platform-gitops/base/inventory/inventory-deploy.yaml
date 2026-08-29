@@ -22,7 +22,7 @@ spec:
         runAsNonRoot: true
       containers:
         - name: inventory
-          image: kubeprojects/inventory:2.0
+          image: kubeprojects/inventory:3.0
           imagePullPolicy: IfNotPresent
           env:
             - name: PORT
