@@ -47,10 +47,10 @@ spec:
             - containerPort: 3001
           resources:
             requests:
-              cpu: "64Mi"
+              cpu: "64m"
               memory: "256Mi"
             limits:
-              cpu: "256Mi"
+              cpu: "256m"
               memory: "512Mi"
           securityContext:
             allowPrivilegeEscalation: false
