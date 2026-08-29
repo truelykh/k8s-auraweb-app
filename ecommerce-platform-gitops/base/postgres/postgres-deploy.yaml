@@ -6,6 +6,8 @@ metadata:
   labels:
     app: postgres-deploy
 spec:
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: postgres-pod-deploy
