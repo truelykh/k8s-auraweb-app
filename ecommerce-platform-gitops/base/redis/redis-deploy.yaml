@@ -17,7 +17,7 @@ spec:
       serviceAccountName: redisservice
       containers:
         - name: redis
-          image: redis:7-alpine
+          image: redis/redis-stack-server:latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 6379

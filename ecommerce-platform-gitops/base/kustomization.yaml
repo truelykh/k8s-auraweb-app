@@ -50,6 +50,8 @@ resources:
 
 configMapGenerator:
   - name: gateway-config
+    options:
+      disableNameSuffixHash: true
     files:
       - gateway/nginx.conf
       - gateway/proxy_params
