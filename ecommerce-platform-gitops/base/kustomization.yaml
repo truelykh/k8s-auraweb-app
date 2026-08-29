@@ -41,4 +41,5 @@ resources:
   - user-auth/user-auth-deploy.yaml
   - user-auth/user-auth-sa.yaml
   - user-auth/user-auth-service.yaml
-  - iinfra/storageclass/storageclass.yaml
+  - infra/storageclass.yaml
+  - infra/namespace.yaml
