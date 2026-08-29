@@ -25,7 +25,7 @@ spec:
           image: kubeprojects/admin:2.0
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 8080
+            - containerPort: 80
           resources:
             requests:
               cpu: "64m"
@@ -49,13 +49,13 @@ spec:
             periodSeconds: 15
             httpGet:
               path: /
-              port: 8080
+              port: 80
           livenessProbe:
             initialDelaySeconds: 20
             periodSeconds: 15
             httpGet:
               path: /
-              port: 8080
+              port: 80
       volumes:
         - name: nginx-cache
           emptyDir: {}
