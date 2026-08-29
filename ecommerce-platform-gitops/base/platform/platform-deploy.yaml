@@ -22,7 +22,7 @@ spec:
         runAsNonRoot: true
       containers:
         - name: platform
-          image: kubeprojects/platform:2.0
+          image: kubeprojects/platform:5.0
           imagePullPolicy: IfNotPresent
           env:
             - name: PORT
@@ -37,6 +37,8 @@ spec:
               value: auraweb_user
             - name: DB_PASSWORD
               value: password
+            - name: REDIS_HOST
+              value: redis-service
             - name: RABBITMQ_URL
               value: amqp://rabbitmq-service:5672
             - name: AWS_ACCESS_KEY_ID
@@ -44,6 +46,12 @@ spec:
             - name: AWS_SECRET_ACCESS_KEY
               value: minio123
             - name: AWS_BUCKET_NAME
+              value: mybucket
+            - name: MINIO_ROOT_USER
+              value: minio
+            - name: MINIO_ROOT_PASSWORD
+              value: minio123
+            - name: MINIO_BUCKET
               value: mybucket
           ports:
             - containerPort: 3005

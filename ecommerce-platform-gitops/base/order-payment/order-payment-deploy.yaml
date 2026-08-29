@@ -22,7 +22,7 @@ spec:
         runAsNonRoot: true
       containers:
         - name: order-payment
-          image: kubeprojects/orderpayment:2.0
+          image: kubeprojects/orderpayment:5.0
           imagePullPolicy: IfNotPresent
           env:
             - name: PORT
@@ -37,6 +37,8 @@ spec:
               value: auraweb_user
             - name: DB_PASSWORD
               value: password
+            - name: REDIS_HOST
+              value: redis-service
             - name: RABBITMQ_URL
               value: amqp://rabbitmq-service:5672
             - name: STRIPE_SECRET_KEY
