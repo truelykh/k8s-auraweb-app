@@ -6,6 +6,8 @@ metadata:
   labels:
     app: rabbitmq-deploy
 spec:
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: rabbitmq-pod-deploy

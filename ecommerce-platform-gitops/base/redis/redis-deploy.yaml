@@ -6,6 +6,8 @@ metadata:
   labels:
     app: redis-deploy
 spec:
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: redis-pod-deploy

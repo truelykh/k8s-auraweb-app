@@ -47,11 +47,4 @@ resources:
   - infra/minio/minio-service.yaml
   - gateway/gateway-deploy.yaml
   - gateway/gateway-service.yaml
-
-configMapGenerator:
-  - name: gateway-config
-    options:
-      disableNameSuffixHash: true
-    files:
-      - gateway/nginx.conf
-      - gateway/proxy_params
+  - gateway/gateway-cm.yaml
